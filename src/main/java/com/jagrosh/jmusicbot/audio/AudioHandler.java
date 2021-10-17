@@ -50,6 +50,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -70,6 +72,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     private AudioConfiguration configuration;
     private boolean shouldRebuild;
     private List<AudioFilter> lastChain;
+    Logger log = LoggerFactory.getLogger("Audio");
 
     private static final float[] BASS_BOOST = {
             0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f
@@ -202,12 +205,16 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
         });
         return true;
     }
-    
+
+    @Override
+    public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
+        track.stop();
+    }
+
     // Audio Events
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) 
     {
-        // if the track ended normally, and we're in repeat mode, re-add it to the queue
         if(endReason==AudioTrackEndReason.FINISHED) {
             previous = track;
         }

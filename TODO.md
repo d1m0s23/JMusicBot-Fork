@@ -11,4 +11,3 @@
 - Save personal queue
 - Add lang file
 - ~~Add many equalizer methods~~
-- load specified track if 24/7 and if queue empty
