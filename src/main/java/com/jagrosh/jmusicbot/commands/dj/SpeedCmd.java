@@ -18,18 +18,28 @@ public class SpeedCmd extends DJCommand {
     @Override
     public void doCommand(CommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+        double args = 0;
+
+        try {
+            args = Double.parseDouble(event.getArgs());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
 
         if(event.getArgs().length() != 0) {
-            if (Double.isNaN(Double.parseDouble(event.getArgs()))) {
-                event.replyError("Only numbers supported!");
-            } else if (handler.getPlayer().getPlayingTrack() == null) {
-                event.replyError("No playing track!");
+            if(!Double.isNaN(args)) {
+                if(args <= 0) {
+                    event.replyError("Number must be larger than `0`");
+                } else {
+                    handler.setSpeed(event.getGuild(), Double.parseDouble(event.getArgs()));
+                    event.replySuccess("Speed now: " + "`" + args + "`");
+                }
             } else {
-                handler.setSpeed(event.getGuild(), Double.parseDouble(event.getArgs()));
-                event.replySuccess("Speed now: " + "`" + event.getArgs() + "`");
+                event.replyError("Only numbers supported!");
             }
+
         } else {
-            event.replyError("Invalid args!");
+            event.replySuccess("Speed now:" + "`" + bot.getSettingsManager().getSettings(event.getGuild().getIdLong()).getSpeed() + "`");
         }
 
     }
