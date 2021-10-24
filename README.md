@@ -4,7 +4,7 @@
 
 [![Downloads](https://img.shields.io/github/downloads/d1m0s23/JMusicBot-Fork/total.svg)](https://github.com/d1m0s23/JMusicBot-Fork/releases/latest)
 [![Stars](https://img.shields.io/github/stars/d1m0s23/JMusicBot-Fork)](https://github.com/d1m0s23/JMusicBot-Fork/stargazers)
-[![Release](https://img.shields.io/github/release/d1m0s23/JMusicBot-Fork)](https://github.com/jagrosh/MusicBot/releases/latest)
+[![Release](https://img.shields.io/github/release/d1m0s23/JMusicBot-Fork)](https://github.com/d1m0s23/JMusicBot-Fork/releases/latest)
 [![License](https://img.shields.io/github/license/d1m0s23/JMusicBot-Fork)](https://github.com/d1m0s23/JMusicBot-Fork/blob/main/LICENSE)
 [![Build status](https://ci.appveyor.com/api/projects/status/gunxknn1bdw7i96k/branch/main?svg=true)](https://ci.appveyor.com/project/d1m0s23/jmusicbot-fork/branch/main)
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/d1m0s23/JMusicBot-Fork/tree/main)
