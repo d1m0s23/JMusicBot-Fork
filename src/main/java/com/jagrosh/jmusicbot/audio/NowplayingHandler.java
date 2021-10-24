@@ -141,7 +141,7 @@ public class NowplayingHandler
             if(track!=null && bot.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count()<=1)
                 bot.getJDA().getPresence().setActivity(Activity.listening(track.getInfo().title));
             else
-                bot.getJDA().getPresence().setActivity(Activity.listening("Type " + bot + "help"));
+                bot.getJDA().getPresence().setActivity(Activity.listening("Type " + bot.getConfig().getPrefix() + "help"));
         }
         
         // update channel topic if applicable

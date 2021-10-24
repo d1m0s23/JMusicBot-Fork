@@ -25,10 +25,10 @@ import com.jagrosh.jmusicbot.commands.OwnerCommand;
  *
  * @author John Grosh (jagrosh)
  */
-public class EvalCmd extends OwnerCommand 
+public class EvalCmd extends OwnerCommand
 {
     private final Bot bot;
-    
+
     public EvalCmd(Bot bot)
     {
         this.bot = bot;
@@ -37,9 +37,9 @@ public class EvalCmd extends OwnerCommand
         this.aliases = bot.getConfig().getAliases(this.name);
         this.guildOnly = false;
     }
-    
+
     @Override
-    protected void execute(CommandEvent event) 
+    protected void execute(CommandEvent event)
     {
         ScriptEngine se = new ScriptEngineManager().getEngineByName("Nashorn");
         se.put("bot", bot);
@@ -50,11 +50,11 @@ public class EvalCmd extends OwnerCommand
         try
         {
             event.reply(event.getClient().getSuccess()+" Evaluated Successfully:\n```\n"+se.eval(event.getArgs())+" ```");
-        } 
+        }
         catch(Exception e)
         {
             event.reply(event.getClient().getError()+" An exception was thrown:\n```\n"+e+" ```");
         }
     }
-    
+
 }
