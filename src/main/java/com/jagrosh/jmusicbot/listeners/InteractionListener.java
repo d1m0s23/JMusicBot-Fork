@@ -8,10 +8,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class InteractionListener extends ListenerAdapter {
     private Bot bot;
+    private String success;
 
     public InteractionListener(Bot bot)
     {
         this.bot = bot;
+        this.success = bot.getConfig().getSuccess();
     }
 
     public void onButtonClick(ButtonClickEvent event) {
@@ -20,50 +22,66 @@ public class InteractionListener extends ListenerAdapter {
 
         assert handler != null;
         if(handler.getPlayer().getPlayingTrack() == null) {
-            event.getInteraction().reply("No track playing").queue();
+            event.getMessage().editMessageComponents().queue();
         } else {
             switch (event.getComponentId()) {
                 case "play:volume_minus":
-                    bot.getSettingsManager().getSettings(event.getGuild().getIdLong()).setVolume(volume -= 10);
+                    bot.getSettingsManager().getSettings(event.getGuild()
+                            .getIdLong()).setVolume(volume -= 10);
+
                     handler.getPlayer().setVolume(volume -=  10);
-                    event.reply("Volume now: " + "`" +  handler.getPlayer().getVolume() + "`").queue();
+
+                    event.reply(success + "Now volume is: " +  "`" +  handler.getPlayer().getVolume()
+                            + "`").setEphemeral(true).queue();
                     break;
                 case "play:volume_plus":
-                    bot.getSettingsManager().getSettings(event.getGuild().getIdLong()).setVolume(volume += 10);
+                    bot.getSettingsManager().getSettings(event.getGuild()
+                            .getIdLong()).setVolume(volume += 10);
+
                     handler.getPlayer().setVolume(volume += 10);
-                    event.reply("Volume now: " +  "`" +  handler.getPlayer().getVolume() + "`").queue();
+
+                    event.reply(success + "Now volume is: " +  "`" +  handler.getPlayer().getVolume()
+                            + "`").setEphemeral(true).queue();
                     break;
                 case "play:stop":
                     handler.getPlayer().stopTrack();
-                    event.reply("Stopped").queue();
+
+                    event.reply(success + "Stopped").setEphemeral(true).queue();
                     break;
                 case "play:play_pause":
                     if (handler.getPlayer().isPaused()) {
                         handler.getPlayer().setPaused(false);
-                        event.reply("Unpause!").queue();
-                        break;
+                        event.reply(success + "Unpause!").setEphemeral(true).queue();
                     } else {
                         handler.getPlayer().setPaused(true);
-                        event.reply( "Paused!").queue();
-                        break;
+                        event.reply( success + "Paused!").setEphemeral(true).queue();
                     }
+                    break;
                 case "play:skip":
                     handler.getPlayer().getPlayingTrack().stop();
-                    event.reply("Skipped!").queue();
+
+                    event.reply(success + "Skipped!").setEphemeral(true).queue();
                     break;
                 case "play:repeat":
-                    if(bot.getSettingsManager().getSettings(event.getGuild().getIdLong()).getRepeatMode().equals(RepeatMode.OFF)) {
-                        bot.getSettingsManager().getSettings(event.getGuild().getIdLong()).setRepeatMode(RepeatMode.TRACK);
-                        event.reply("Now repeat is: " + "**" + RepeatMode.TRACK.getName() + "**").queue();
-                        break;
-                    } else if(bot.getSettingsManager().getSettings(event.getGuild().getIdLong()).getRepeatMode().equals(RepeatMode.TRACK)) {
-                        bot.getSettingsManager().getSettings(event.getGuild().getIdLong()).setRepeatMode(RepeatMode.QUEUE);
-                        event.reply("Now repeat is: " + "**" + RepeatMode.QUEUE.getName() + "**").queue();
-                        break;
-                    } else if(bot.getSettingsManager().getSettings(event.getGuild().getIdLong()).getRepeatMode().equals(RepeatMode.QUEUE)) {
-                        bot.getSettingsManager().getSettings(event.getGuild().getIdLong()).setRepeatMode(RepeatMode.OFF);
-                        event.reply("Now repeat is: " + "**" + RepeatMode.OFF.getName() + "**").queue();
-                        break;
+                    switch (bot.getSettingsManager().getSettings(event.getGuild().getIdLong()).getRepeatMode()) {
+                        case OFF:
+                            bot.getSettingsManager().getSettings(event.getGuild().getIdLong())
+                                    .setRepeatMode(RepeatMode.TRACK);
+
+                            event.reply("Now repeat is: " + "**" + RepeatMode.TRACK.getName() + "**").setEphemeral(true).queue();
+                            break;
+                        case QUEUE:
+                            bot.getSettingsManager().getSettings(event.getGuild().getIdLong())
+                                    .setRepeatMode(RepeatMode.OFF);
+
+                            event.reply("Now repeat is: " + "**" + RepeatMode.OFF.getName() + "**").setEphemeral(true).queue();
+                            break;
+                        case TRACK:
+                            bot.getSettingsManager().getSettings(event.getGuild().getIdLong())
+                                    .setRepeatMode(RepeatMode.QUEUE);
+
+                            event.reply("Now repeat is: " + "**" + RepeatMode.QUEUE.getName() + "**").setEphemeral(true).queue();
+                            break;
                     }
             }
         }
