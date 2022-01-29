@@ -217,12 +217,13 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     {
         if(endReason==AudioTrackEndReason.FINISHED) {
             previous = track;
-        }
-        if(endReason==AudioTrackEndReason.FINISHED && Objects.equals(manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode(), RepeatMode.TRACK)) {
-            queue.add(new QueuedTrack(track.makeClone(), track.getUserData(Long.class) == null ? 0L : track.getUserData(Long.class)));
-        }
-        if(endReason==AudioTrackEndReason.FINISHED && Objects.equals(manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode(), RepeatMode.QUEUE)) {
-            queue.addAt(queue.size(), new QueuedTrack(track.makeClone(), track.getUserData(Long.class) == null ? 0L : track.getUserData(Long.class)));
+
+            switch (manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode()) {
+                case TRACK: queue.add(new QueuedTrack(track.makeClone(),
+                        track.getUserData(Long.class) == null ? 0L : track.getUserData(Long.class)));
+                case QUEUE: queue.addAt(queue.size(), new QueuedTrack(track.makeClone(),
+                        track.getUserData(Long.class) == null ? 0L : track.getUserData(Long.class)));
+            }
         }
 
         if(queue.isEmpty())

@@ -23,7 +23,10 @@ public class PreviousCmd extends DJCommand {
         if(handler.getPreviousTrack() != null) {
             if(handler.getNowPlaying(bot.getJDA()) != null) {
                 try {
-                    handler.getQueue().add(new QueuedTrack(handler.getPreviousTrack().makeClone(), handler.getPreviousTrack().getUserData(Long.class) == null ? 0L :handler.getPreviousTrack().getUserData(Long.class)));
+                    handler.getQueue().add(new QueuedTrack(handler.getPreviousTrack().makeClone(),
+                            handler.getPreviousTrack().getUserData(Long.class) == null ? 0L
+                                    : handler.getPreviousTrack().getUserData(Long.class)));
+
                     handler.getPlayer().stopTrack();
                 } finally {
                     event.replySuccess("Previous loaded!");
@@ -31,8 +34,13 @@ public class PreviousCmd extends DJCommand {
             } else {
                 try {
                     if(userState.inVoiceChannel()) {
+
                         event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
-                        handler.getQueue().add(new QueuedTrack(handler.getPreviousTrack().makeClone(), handler.getPreviousTrack().getUserData(Long.class) == null ? 0L :handler.getPreviousTrack().getUserData(Long.class)));
+
+                        handler.getQueue().add(new QueuedTrack(handler.getPreviousTrack().makeClone(),
+                                handler.getPreviousTrack().getUserData(Long.class) == null ? 0L
+                                        : handler.getPreviousTrack().getUserData(Long.class)));
+
                         handler.getPlayer().stopTrack();
                     } else {
                         event.replyError("You not in voice channel!");

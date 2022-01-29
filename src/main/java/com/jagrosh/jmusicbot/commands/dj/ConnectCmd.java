@@ -4,13 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.commands.DJCommand;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.TimeUnit;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 
 public class ConnectCmd extends DJCommand {
@@ -23,88 +17,47 @@ public class ConnectCmd extends DJCommand {
     }
 
     public void doCommand(CommandEvent event)  {
-        Logger log = LoggerFactory.getLogger("MusicBot");
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        VoiceChannel current = event.getGuild().getSelfMember().getVoiceState().getChannel();
-        VoiceChannel userState = event.getMember().getVoiceState().getChannel();
-        String args = event.getArgs();
 
-        if(userState != null) {
-            if(args != null && !args.isEmpty()) {
-                if(event.getGuild().getVoiceChannelById(args) != null) {
-                    if(current != null) {
-                        try {
-                            if(current.getIdLong() != Long.valueOf(args)) {
-                                try {
-                                    if (handler.getPlayingTrack() != null) handler.getPlayer().setPaused(true);
-                                    event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceChannelById(event.getArgs()));
-                                } catch (Exception ignored) {
-                                } finally {
-                                    if (handler.getPlayingTrack() != null) handler.getPlayer().setPaused(false);
-                                    event.replySuccess("Now in voice: <#" + event.getArgs() + ">");
-                                }
-                            } else {
-                                event.replyError("Im already connected to this channel!");
-                            }
-                        } catch (NumberFormatException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        try {
-                            if (handler.getPlayingTrack() != null) handler.getPlayer().setPaused(true);
-                            event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceChannelById(event.getArgs()));
-                        } catch (Exception ignored) {
-                        } finally {
-                            if (handler.getPlayingTrack() != null) handler.getPlayer().setPaused(false);
-                            event.replySuccess("Now in voice: <#" + event.getArgs() + ">");
-                        }
-                    }
+        if(event.getArgs().isEmpty()) {
+            if(event.getMember().getVoiceState().inVoiceChannel()) {
+                if(handler.getPlayingTrack() != null) {
+                    handler.getPlayer().setPaused(true);
+
+                    event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+
+                    handler.getPlayer().setPaused(false);
+
+                    event.replySuccess("Now in voice: " +  event.getGuild().getSelfMember().getVoiceState().getChannel().getAsMention());
                 } else {
-                    event.replyError("Invalid channel!");
+                    event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+
+                    event.replySuccess("Now in voice: " +  event.getGuild().getSelfMember().getVoiceState().getChannel().getAsMention());
                 }
             } else {
-                try {
-                    if(handler.getPlayingTrack() != null) handler.getPlayer().setPaused(true);
-                    event.getGuild().getAudioManager().openAudioConnection(userState);
-                } catch (Exception ignored) {}
-                finally {
-                    if(handler.getPlayingTrack() != null) handler.getPlayer().setPaused(false);
-                    event.replySuccess("Now in voice: <#" + userState.getIdLong() + ">");
-                }
+                event.replyError("No args!");
             }
-        } else if(args.isEmpty()) {
-            event.replyError("Empty channel!");
         } else {
-            if(event.getGuild().getVoiceChannelById(args) != null) {
-                if(current != null) {
-                    try {
-                        if(current.getIdLong() != Long.valueOf(args)) {
-                            try {
-                                if (handler.getPlayingTrack() != null) handler.getPlayer().setPaused(true);
-                                event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceChannelById(event.getArgs()));
-                            } catch (Exception ignored) {
-                            } finally {
-                                if (handler.getPlayingTrack() != null) handler.getPlayer().setPaused(false);
-                                event.replySuccess("Now in voice: <#" + event.getArgs() + ">");
-                            }
-                        } else {
-                            event.replyError("Im already connected to this channel!");
-                        }
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
+            if(!event.getGuild().getVoiceChannelById(event.getArgs()).getId().isEmpty()
+                    && event.getGuild().getVoiceChannelById(event.getArgs()).getIdLong() != 0)
+            {
+                if(handler.getPlayingTrack() != null) {
+                    handler.getPlayer().setPaused(true);
+
+                    event.getGuild().getAudioManager().openAudioConnection(event.getGuild()
+                            .getVoiceChannelById(event.getArgs()));
+
+                    handler.getPlayer().setPaused(false);
+
+                    event.replySuccess("Now in voice: " +  event.getGuild().getSelfMember().getVoiceState().getChannel().getAsMention());
                 } else {
-                    try {
-                        if (handler.getPlayingTrack() != null) handler.getPlayer().setPaused(true);
-                        event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceChannelById(event.getArgs()));
-                    } catch (Exception ignored) {
-                    } finally {
-                        if (handler.getPlayingTrack() != null) handler.getPlayer().setPaused(false);
-                        event.replySuccess("Now in voice: <#" + event.getArgs() + ">");
-                    }
+                    event.getGuild().getAudioManager().openAudioConnection(event.getGuild()
+                            .getVoiceChannelById(event.getArgs()));
+
+                    event.replySuccess("Now in voice: " +  event.getGuild().getSelfMember().getVoiceState().getChannel().getAsMention());
                 }
             } else {
-                event.replyError("Invalid channel!");
+                event.replyError("Unknown channel!");
             }
         }
     }
