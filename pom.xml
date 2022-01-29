@@ -62,9 +62,9 @@
             <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>com.github.jagrosh</groupId>
+            <groupId>com.jagrosh</groupId>
             <artifactId>JLyrics</artifactId>
-            <version>-SNAPSHOT</version>
+            <version>0.4</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>

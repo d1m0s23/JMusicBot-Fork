@@ -42,7 +42,7 @@
     <orderEntry type="library" name="Maven: com.jagrosh:jda-utilities-examples:3.0.5" level="project" />
     <orderEntry type="library" name="Maven: com.jagrosh:jda-utilities-menu:3.0.5" level="project" />
     <orderEntry type="library" name="Maven: com.jagrosh:jda-utilities-oauth2:3.0.5" level="project" />
-    <orderEntry type="library" name="Maven: com.github.jagrosh:JLyrics:-0f9ac5df83-1" level="project" />
+    <orderEntry type="library" name="Maven: com.jagrosh:JLyrics:0.4" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.2.3" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.2.3" level="project" />
     <orderEntry type="library" name="Maven: com.typesafe:config:1.3.2" level="project" />
