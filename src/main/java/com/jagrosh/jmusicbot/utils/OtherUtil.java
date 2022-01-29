@@ -180,7 +180,7 @@ public class OtherUtil
         try
         {
             Response response = new OkHttpClient.Builder().build()
-                    .newCall(new Request.Builder().get().url("https://api.github.com/repos/d1m0s23/JJMusicBot-Fork/releases/latest").build())
+                    .newCall(new Request.Builder().get().url("https://api.github.com/repos/d1m0s23/JMusicBot-Fork/releases/latest").build())
                     .execute();
             ResponseBody body = response.body();
             if(body != null)
