@@ -38,27 +38,29 @@ public class ConnectCmd extends DJCommand {
                 event.replyError("No args!");
             }
         } else {
-            if(!event.getGuild().getVoiceChannelById(event.getArgs()).getId().isEmpty()
-                    && event.getGuild().getVoiceChannelById(event.getArgs()).getIdLong() != 0)
-            {
-                if(handler.getPlayingTrack() != null) {
-                    handler.getPlayer().setPaused(true);
+            try {
+                if(!event.getGuild().getVoiceChannelById(event.getArgs()).getId().isEmpty()
+                        && event.getGuild().getVoiceChannelById(event.getArgs()).getIdLong() != 0)
+                {
+                    if(handler.getPlayingTrack() != null) {
+                        handler.getPlayer().setPaused(true);
 
-                    event.getGuild().getAudioManager().openAudioConnection(event.getGuild()
-                            .getVoiceChannelById(event.getArgs()));
+                        event.getGuild().getAudioManager().openAudioConnection(event.getGuild()
+                                .getVoiceChannelById(event.getArgs()));
 
-                    handler.getPlayer().setPaused(false);
+                        handler.getPlayer().setPaused(false);
 
-                    event.replySuccess("Now in voice: " +  event.getGuild().getSelfMember().getVoiceState().getChannel().getAsMention());
+                        event.replySuccess("Now in voice: " +  event.getGuild().getSelfMember().getVoiceState().getChannel().getAsMention());
+                    } else {
+                        event.getGuild().getAudioManager().openAudioConnection(event.getGuild()
+                                .getVoiceChannelById(event.getArgs()));
+
+                        event.replySuccess("Now in voice: " +  event.getGuild().getSelfMember().getVoiceState().getChannel().getAsMention());
+                    }
                 } else {
-                    event.getGuild().getAudioManager().openAudioConnection(event.getGuild()
-                            .getVoiceChannelById(event.getArgs()));
-
-                    event.replySuccess("Now in voice: " +  event.getGuild().getSelfMember().getVoiceState().getChannel().getAsMention());
+                    event.replyError("Unknown channel!");
                 }
-            } else {
-                event.replyError("Unknown channel!");
-            }
+            } catch (Exception ignored) {}
         }
     }
 }
